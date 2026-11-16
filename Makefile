@@ -50,4 +50,37 @@ $(GUI): $(GUI_SRC) $(IMGUI_SRC) $(TE_SRC) | $(BUILD)
 clean:
 	rm -rf $(BUILD)
 
-.PHONY: all clean
+# ---------------------------------------------------------------------------
+# install targets
+# ---------------------------------------------------------------------------
+PREFIX    ?= /usr
+DESTDIR   ?=
+
+BINDIR    := $(DESTDIR)$(PREFIX)/bin
+LIBDIR    := $(DESTDIR)$(PREFIX)/lib/sober-exec
+DESKTOPDIR:= $(DESTDIR)$(PREFIX)/share/applications
+ICONDIR   := $(DESTDIR)$(PREFIX)/share/icons/hicolor/scalable/apps
+DOCDIR    := $(DESTDIR)$(PREFIX)/share/doc/sober-exec
+LICENSEDIR:= $(DESTDIR)$(PREFIX)/share/licenses/sober-exec
+
+install: all
+	install -Dm755 $(GUI)     $(BINDIR)/sober-exec-gui
+	install -Dm755 $(CLIENT)  $(BINDIR)/sober-cli
+	install -Dm755 $(BIN)     $(BINDIR)/sober-exec
+	install -Dm755 packaging/sober-exec-launch.sh $(BINDIR)/sober-exec-launch
+	install -Dm755 $(PAYLOAD) $(LIBDIR)/libsoberpay.so
+	install -Dm644 packaging/sober-exec.desktop $(DESKTOPDIR)/sober-exec.desktop
+	install -Dm644 packaging/sober-exec.svg     $(ICONDIR)/sober-exec.svg
+	install -Dm644 README.md                    $(DOCDIR)/README.md
+
+uninstall:
+	rm -f $(BINDIR)/sober-exec-gui
+	rm -f $(BINDIR)/sober-cli
+	rm -f $(BINDIR)/sober-exec
+	rm -f $(BINDIR)/sober-exec-launch
+	rm -rf $(LIBDIR)
+	rm -f $(DESKTOPDIR)/sober-exec.desktop
+	rm -f $(ICONDIR)/sober-exec.svg
+	rm -rf $(DOCDIR)
+
+.PHONY: all clean install uninstall

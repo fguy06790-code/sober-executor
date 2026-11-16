@@ -1,0 +1,24 @@
+# Maintainer: fguy06790-code
+pkgname=sober-exec
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Roblox Lua script executor for Linux, targeting the Sober flatpak"
+arch=('x86_64')
+url="https://github.com/fguy06790-code/sober-executor"
+license=('MIT')
+depends=('glfw' 'glibc' 'gcc-libs' 'libgl')
+makedepends=('gcc' 'make' 'pkgconf')
+optdepends=('flatpak: required to run Sober from the GUI launcher'
+            'org.vinegarhq.Sober: the Roblox client this targets')
+source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+
+build() {
+    cd "sober-executor-$pkgver"
+    make
+}
+
+package() {
+    cd "sober-executor-$pkgver"
+    make install DESTDIR="$pkgdir" PREFIX=/usr
+}

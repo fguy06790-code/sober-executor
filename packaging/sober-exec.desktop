@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Sober Exec
+GenericName=Roblox Script Executor
+Comment=Lua script executor for Roblox running under the Sober flatpak
+Exec=sober-exec-launch
+Icon=sober-exec
+Terminal=false
+Categories=Development;Utility;
+StartupNotify=true
+StartupWMClass=sober-exec
+Keywords=roblox;lua;luau;executor;sober;

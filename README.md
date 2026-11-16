@@ -27,7 +27,38 @@ Two injection paths:
   Sober under `--devel`/permissive `yama.ptrace_scope`). Use
   `sober-exec inject`.
 
-## Build
+## Install (Arch Linux)
+
+From source, system-wide:
+
+```bash
+git clone https://github.com/fguy06790-code/sober-executor
+cd sober-executor
+makepkg -si -p packaging/PKGBUILD
+```
+
+Or without a PKGBUILD:
+
+```bash
+sudo pacman -S --needed glfw libgl pkgconf make gcc
+make
+sudo make install
+```
+
+After install, **Sober Exec** appears in your application launcher. It
+drops:
+
+- `/usr/bin/sober-exec-gui` — the ImGui frontend
+- `/usr/bin/sober-exec-launch` — desktop entrypoint (starts Sober w/ payload if needed)
+- `/usr/bin/sober-cli` — CLI dispatcher
+- `/usr/bin/sober-exec` — ptrace loader
+- `/usr/lib/sober-exec/libsoberpay.so` — the payload
+- `/usr/share/applications/sober-exec.desktop`
+- `/usr/share/icons/hicolor/scalable/apps/sober-exec.svg`
+
+Uninstall: `sudo make uninstall`.
+
+## Build (from source, no install)
 
 ```bash
 make
@@ -35,14 +66,26 @@ make
 
 Outputs under `build/`:
 
-- `libsoberpay.so` — the injected payload.
-- `sober-exec`     — process locator + ptrace injector.
-- `sober-cli`      — script dispatcher over unix socket.
+- `libsoberpay.so`    — the injected payload.
+- `sober-exec`        — process locator + ptrace injector.
+- `sober-cli`         — script dispatcher over unix socket.
+- `sober-exec-gui`    — ImGui frontend.
+
+Build deps on Arch: `glfw libgl pkgconf make gcc`.
+Build deps on Debian/Ubuntu: `libglfw3-dev libgl-dev pkg-config g++ make`.
 
 ## Launch & use
 
+**From the app launcher (after `make install`):** click **Sober Exec**.
+The launcher starts Sober with the payload preloaded if it isn't already
+running, then opens the GUI.
+
+**From the terminal (uninstalled):**
+
 ```bash
 ./sober-exec-run.sh &                  # starts Sober with payload preloaded
+./build/sober-exec-gui &                # GUI
+# -- or -- strictly CLI:
 ./build/sober-cli ping                 # verify socket is up
 ./build/sober-cli exec hello.lua       # run a script
 ./build/sober-cli exec -s 'print(identifyexecutor())'
