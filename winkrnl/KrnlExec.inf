@@ -1,0 +1,51 @@
+; KrnlExec.inf — install script for the KrnlExec roblox executor driver.
+; Signed with a test cert; install needs BCDedit /set testsigning on.
+
+[Version]
+Signature   = "$WINDOWS NT$"
+Class       = System
+ClassGuid   = {4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider    = %ManufacturerName%
+DriverVer   = 11/16/2026,1.0.0.0
+CatalogFile = KrnlExec.cat
+PnpLockdown = 1
+
+[DestinationDirs]
+DefaultDestDir = 12          ; %windir%\system32\drivers
+
+[DefaultInstall]
+OptionDesc = %ServiceDesc%
+CopyFiles  = KrnlExec.CopyFiles
+
+[DefaultInstall.Services]
+AddService = %ServiceName%,0x00000002,KrnlExec.Service
+
+[DefaultUninstall]
+LegacyUninstall = 1
+DelFiles        = KrnlExec.CopyFiles
+
+[DefaultUninstall.Services]
+DelService = %ServiceName%,0x200
+
+[KrnlExec.CopyFiles]
+KrnlExec.sys
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+KrnlExec.sys = 1
+
+[KrnlExec.Service]
+DisplayName   = %ServiceName%
+Description   = %ServiceDesc%
+ServiceType   = 1            ; SERVICE_KERNEL_DRIVER
+StartType     = 3            ; SERVICE_DEMAND_START
+ErrorControl  = 1            ; SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\KrnlExec.sys
+
+[Strings]
+ManufacturerName = "sober-exec"
+DiskName         = "KrnlExec Install Disk"
+ServiceName      = "KrnlExec"
+ServiceDesc      = "Roblox executor API kernel driver"
